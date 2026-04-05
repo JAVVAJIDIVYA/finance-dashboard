@@ -1,9 +1,9 @@
 import React from 'react';
-import { Sun, Moon, User, Bell, Menu } from 'lucide-react';
+import { User, Bell, Menu } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 
 export default function TopNav() {
-  const { role, setRole, theme, toggleTheme, currentView } = useAppContext();
+  const { role, setRole, currentView } = useAppContext();
 
   return (
     <header className="sticky top-0 z-40 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
@@ -44,15 +44,6 @@ export default function TopNav() {
           </div>
 
           <div className="flex items-center gap-1 border-r border-slate-200 dark:border-slate-800 pr-2 md:pr-4">
-            {/* Theme Toggle */}
-            <button 
-              onClick={toggleTheme}
-              className="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
-              title="Toggle Theme"
-            >
-              {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
-            </button>
-
             {/* Notifications */}
             <button className="relative p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
               <Bell size={20} />

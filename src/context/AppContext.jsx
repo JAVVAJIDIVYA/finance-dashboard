@@ -9,7 +9,6 @@ export const AppProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [transactions, setTransactions] = useState([]);
   const [role, setRole] = useState(localStorage.getItem('finance_role') || 'viewer');
-  const [theme, setTheme] = useState(localStorage.getItem('finance_theme') || 'light');
   const [currentView, setCurrentView] = useState('Dashboard');
 
   // Search and Filters
@@ -17,6 +16,11 @@ export const AppProvider = ({ children }) => {
   const [filterType, setFilterType] = useState('all'); // 'all' | 'income' | 'expense'
   const [sortBy, setSortBy] = useState('date'); // 'date' | 'amount'
   const [groupByCategory, setGroupByCategory] = useState(false);
+
+  // Force Dark Mode on mount
+  useEffect(() => {
+    document.documentElement.classList.add('dark');
+  }, []);
 
   // Simulated Mock API Fetch
   useEffect(() => {
@@ -44,19 +48,6 @@ export const AppProvider = ({ children }) => {
     localStorage.setItem('finance_role', role);
   }, [role]);
 
-  useEffect(() => {
-    localStorage.setItem('finance_theme', theme);
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
-  };
-
   const addTransaction = (txn) => {
     const newTxn = {
       ...txn,
@@ -75,8 +66,7 @@ export const AppProvider = ({ children }) => {
     transactions,
     role,
     setRole,
-    theme,
-    toggleTheme,
+    theme: 'dark', // Fixed theme
     searchQuery,
     setSearchQuery,
     filterType,

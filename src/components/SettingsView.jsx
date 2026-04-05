@@ -1,9 +1,9 @@
 import React from 'react';
-import { User, Bell, Shield, Eye, Globe, Smartphone, Save, LogOut } from 'lucide-react';
+import { User, Bell, Shield, Globe, Save } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 
 export default function SettingsView() {
-  const { role, theme, toggleTheme } = useAppContext();
+  const { role } = useAppContext();
 
   const sections = [
     { 
@@ -83,22 +83,6 @@ export default function SettingsView() {
               </div>
             </div>
           ))}
-
-          <div className="card p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="font-bold text-slate-900 dark:text-white">Appearance</h3>
-                <p className="text-xs text-slate-500">Switch between light and dark themes</p>
-              </div>
-              <button 
-                onClick={toggleTheme}
-                className="flex items-center gap-3 px-6 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-sm font-bold text-slate-900 dark:text-white hover:scale-105 transition-all"
-              >
-                {theme === 'light' ? <Smartphone size={18} /> : <Smartphone size={18} />}
-                {theme === 'light' ? 'Switch to Dark' : 'Switch to Light'}
-              </button>
-            </div>
-          </div>
 
           <div className="flex justify-end gap-4">
             <button className="px-8 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">Cancel</button>
