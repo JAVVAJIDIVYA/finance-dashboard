@@ -3,9 +3,18 @@ import { Award, Calendar, TrendingUp, TrendingDown, Target } from 'lucide-react'
 import { useAppContext } from '../context/AppContext';
 
 export default function Insights() {
-  const { transactions } = useAppContext();
+  const { transactions, isLoading } = useAppContext();
 
   const insights = useMemo(() => {
+    if (isLoading) {
+      return {
+        highestCategory: { name: '...', amount: 0 },
+        monthlyExpenses: 0,
+        totalIncome: 0,
+        totalExpenses: 0
+      };
+    }
+    
     const expenses = transactions.filter(t => t.type === 'expense');
     const incomes = transactions.filter(t => t.type === 'income');
 
@@ -44,6 +53,48 @@ export default function Insights() {
   const total = insights.totalIncome + insights.totalExpenses;
   const incomePercent = total > 0 ? (insights.totalIncome / total) * 100 : 0;
   const expensePercent = total > 0 ? (insights.totalExpenses / total) * 100 : 0;
+
+  if (isLoading) {
+    return (
+      <div className="card p-6 h-full flex flex-col relative overflow-hidden">
+        <div className="flex items-center justify-between mb-8">
+          <div className="space-y-2">
+            <div className="w-32 h-4 bg-slate-100 dark:bg-slate-800 rounded-full animate-pulse"></div>
+            <div className="w-48 h-3 bg-slate-100 dark:bg-slate-800 rounded-full animate-pulse"></div>
+          </div>
+          <div className="w-10 h-10 bg-slate-100 dark:bg-slate-800 rounded-lg animate-pulse"></div>
+        </div>
+        
+        <div className="space-y-8 flex-1">
+          {[1, 2].map(i => (
+            <div key={i} className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-2xl animate-pulse"></div>
+              <div className="flex-1 space-y-2">
+                <div className="w-20 h-2 bg-slate-100 dark:bg-slate-800 rounded-full animate-pulse"></div>
+                <div className="w-32 h-4 bg-slate-100 dark:bg-slate-800 rounded-full animate-pulse"></div>
+              </div>
+              <div className="w-16 h-8 bg-slate-100 dark:bg-slate-800 rounded-lg animate-pulse"></div>
+            </div>
+          ))}
+          
+          <div className="pt-6 border-t border-slate-100 dark:border-slate-800 mt-auto space-y-6">
+            <div className="w-24 h-3 bg-slate-100 dark:bg-slate-800 rounded-full animate-pulse mb-4"></div>
+            <div className="space-y-4">
+              {[1, 2].map(i => (
+                <div key={i} className="space-y-2">
+                  <div className="flex justify-between">
+                    <div className="w-12 h-2 bg-slate-100 dark:bg-slate-800 rounded-full animate-pulse"></div>
+                    <div className="w-8 h-2 bg-slate-100 dark:bg-slate-800 rounded-full animate-pulse"></div>
+                  </div>
+                  <div className="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full animate-pulse"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="card p-6 h-full flex flex-col">

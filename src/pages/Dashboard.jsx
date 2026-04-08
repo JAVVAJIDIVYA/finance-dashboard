@@ -10,9 +10,11 @@ import PaymentsView from '../components/PaymentsView';
 import SettingsView from '../components/SettingsView';
 
 export default function Dashboard() {
-  const { transactions, currentView } = useAppContext();
+  const { transactions, currentView, isLoading } = useAppContext();
 
   const summary = useMemo(() => {
+    if (isLoading) return { totalIncome: 0, totalExpenses: 0, balance: 0 };
+    
     const totalIncome = transactions
       .filter(t => t.type === 'income')
       .reduce((sum, t) => sum + t.amount, 0);
@@ -26,7 +28,7 @@ export default function Dashboard() {
       totalExpenses,
       balance: totalIncome - totalExpenses
     };
-  }, [transactions]);
+  }, [transactions, isLoading]);
 
   // Route to the correct view
   if (currentView === 'Analytics') return <AnalyticsView />;
@@ -64,6 +66,7 @@ export default function Dashboard() {
           icon={Wallet} 
           color="bg-blue-600"
           trend="up"
+          isLoading={isLoading}
         />
         <SummaryCard 
           title="Total Income" 
@@ -71,6 +74,7 @@ export default function Dashboard() {
           icon={TrendingUp} 
           color="bg-emerald-600"
           trend="up"
+          isLoading={isLoading}
         />
         <SummaryCard 
           title="Total Expenses" 
@@ -78,6 +82,7 @@ export default function Dashboard() {
           icon={TrendingDown} 
           color="bg-rose-600"
           trend="down"
+          isLoading={isLoading}
         />
       </div>
 

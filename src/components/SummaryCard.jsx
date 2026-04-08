@@ -1,10 +1,23 @@
 import React from 'react';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 
-export default function SummaryCard({ title, amount, icon: Icon, color, trend }) {
+export default function SummaryCard({ title, amount, icon: Icon, color, trend, isLoading }) {
   const isIncome = title.toLowerCase().includes('income');
   const isExpense = title.toLowerCase().includes('expense');
   
+  if (isLoading) {
+    return (
+      <div className="card p-6 flex items-start justify-between overflow-hidden relative">
+        <div className="flex-1">
+          <div className="w-20 h-3 bg-slate-100 dark:bg-slate-800 rounded-full mb-3 animate-pulse"></div>
+          <div className="w-32 h-8 bg-slate-100 dark:bg-slate-800 rounded-full mb-3 animate-pulse"></div>
+          <div className="w-24 h-4 bg-slate-100 dark:bg-slate-800 rounded-full animate-pulse"></div>
+        </div>
+        <div className="w-14 h-14 bg-slate-100 dark:bg-slate-800 rounded-2xl animate-pulse"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="card p-6 flex items-start justify-between">
       <div>

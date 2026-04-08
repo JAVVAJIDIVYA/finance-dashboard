@@ -8,11 +8,12 @@ import { useAppContext } from '../context/AppContext';
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4'];
 
 export default function Charts() {
-  const { transactions, theme } = useAppContext();
+  const { transactions, theme, isLoading } = useAppContext();
   const isDark = theme === 'dark';
 
   // Process data for Line Chart (Balance over time)
   const lineChartData = useMemo(() => {
+    if (isLoading) return [];
     const sorted = [...transactions].sort((a, b) => new Date(a.date) - new Date(b.date));
     let balance = 0;
     const dailyBalances = sorted.reduce((acc, curr) => {
@@ -26,10 +27,11 @@ export default function Charts() {
       date: new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
       balance
     })).slice(-7); // Show last 7 data points
-  }, [transactions]);
+  }, [transactions, isLoading]);
 
   // Process data for Pie Chart (Expenses by category)
   const pieChartData = useMemo(() => {
+    if (isLoading) return [];
     const expenses = transactions.filter(t => t.type === 'expense');
     const categoryTotals = expenses.reduce((acc, curr) => {
       acc[curr.category] = (acc[curr.category] || 0) + curr.amount;
@@ -40,7 +42,23 @@ export default function Charts() {
       name,
       value
     }));
-  }, [transactions]);
+  }, [transactions, isLoading]);
+
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {[1, 2].map(i => (
+          <div key={i} className="card p-6 h-[400px] flex flex-col">
+            <div className="space-y-2 mb-8">
+              <div className="w-32 h-4 bg-slate-100 dark:bg-slate-800 rounded-full animate-pulse"></div>
+              <div className="w-48 h-3 bg-slate-100 dark:bg-slate-800 rounded-full animate-pulse"></div>
+            </div>
+            <div className="flex-1 bg-slate-100/50 dark:bg-slate-800/50 rounded-2xl animate-pulse"></div>
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
